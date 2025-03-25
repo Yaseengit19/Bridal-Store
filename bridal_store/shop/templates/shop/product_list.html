@@ -1,0 +1,94 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}Products{% if category %} - {{ category.name }}{% endif %}{% endblock %}
+
+{% block content %}
+<!-- Horizontal Categories in Parallelogram Tiles -->
+<div class="mb-4">
+    <h3 class="mb-3">Categories</h3>
+    <div class="d-flex flex-wrap gap-2">
+        <div class="category-tile {% if not category %}active{% endif %}">
+            <a href="{% url 'shop:product_list' %}" class="text-decoration-none d-block h-100 w-100 p-3 {% if not category %}text-white{% endif %}">
+                All
+            </a>
+        </div>
+        {% for c in categories %}
+            <div class="category-tile {% if category.slug == c.slug %}active{% endif %}">
+                <a href="{{ c.get_absolute_url }}" class="text-decoration-none d-block h-100 w-100 p-3 {% if category.slug == c.slug %}text-white{% endif %}">
+                    {{ c.name }}
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Products Section Below -->
+<div class="mt-4">
+    <h2>{% if category %}{{ category.name }}{% else %}All Products{% endif %}</h2>
+    <hr>
+    <div class="row">
+        {% for product in products %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                    {% else %}
+                        <div class="bg-light p-5 text-center">No Image</div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text">Rs :{{ product.price }}</p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <a href="{{ product.get_absolute_url }}" class="btn btn-sm btn-outline-secondary">Details</a>
+                        <form action="{% url 'shop:add_to_cart' product.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-primary">Add to Cart</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <p>No products available.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    /* Parallelogram style for category tiles */
+    .category-tile {
+        display: inline-block;
+        min-width: 150px;
+        height: 80px;
+        background-color:rgb(203, 206, 208);
+        border: 1px solidrgb(167, 185, 80);
+        transform: skew(-15deg);
+        transition: all 0.3s ease;
+        position: relative;
+        text-align: center;
+        border-radius:20px;
+    }
+    
+    .category-tile a {
+        transform: skew(15deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .category-tile:hover {
+        background-color: #FFD700;
+    }
+    
+    .category-tile.active {
+        background-color: #FFD700;
+
+    }
+    
+    .gap-2 {
+        gap: 0.5rem;
+    }
+</style>
+{% endblock %}

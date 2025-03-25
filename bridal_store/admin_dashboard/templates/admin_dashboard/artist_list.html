@@ -1,0 +1,55 @@
+{% extends "admin_dashboard/base.html" %}
+
+{% block title %}Artists | Admin Panel{% endblock %}
+
+{% block content %}
+<div class="artists-list">
+    <div class="page-header">
+        <h1>Artists</h1>
+        <a href="{% url 'admin_dashboard:artist_create' %}" class="btn btn-primary">Add New Artist</a>
+    </div>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Photo</th>
+                <th>Name</th>
+                <th>Specialization</th>
+                <th>Price per Hour</th>
+                <th>Available</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for artist in artists %}
+            <tr>
+                <td>{{ artist.id }}</td>
+                <td>
+                    {% if artist.photo %}
+                        <img src="{{ artist.photo.url }}" alt="{{ artist.name }}" class="thumbnail" style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px;">
+                    {% else %}
+                        <div class="no-image">No Image</div>
+                    {% endif %}
+                </td>
+                <td>{{ artist.name }}</td>
+                <td>{{ artist.specialization }}</td>
+                <td>${{ artist.price_per_hour|floatformat:2 }}</td>
+                <td>
+                    <span class="status-badge status-{% if artist.available %}available{% else %}unavailable{% endif %}">
+                        {% if artist.available %}Yes{% else %}No{% endif %}
+                    </span>
+                </td>
+                <td class="actions">
+                    <a href="{% url 'admin_dashboard:artist_detail' artist.id %}" class="btn btn-sm">View</a>
+                    <a href="{% url 'admin_dashboard:artist_edit' artist.id %}" class="btn btn-sm btn-edit">Edit</a>
+                    {% comment %} <a href="{% url 'admin_dashboard:artist_delete' artist.id %}" class="btn btn-sm btn-delete">Delete</a> {% endcomment %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="7">No artists available</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

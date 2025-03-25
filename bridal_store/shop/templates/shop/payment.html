@@ -1,0 +1,125 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}Payment{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Confirm Your Payment</h3>
+                </div>
+                <div class="card-body">
+                    <h5>Order Summary:</h5>
+                    <table class="table">
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-right"><strong>Total:</strong></td>
+                                <td class="text-right"><strong>Rs {{ total }}</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Pay Now</h3>
+                </div>
+                <div class="card-body text-center">
+                    <h4>Total Amount: Rs {{ total }}</h4>
+                    <button id="rzp-button" data-key="{{ razorpay_key_id }}">Pay with Razorpay</button>
+                    <p class="text-muted mt-3">
+                        <small>You'll be redirected to Razorpay's secure payment gateway.</small>
+                        <p>Razorpay Key: {{ razorpay_key }}</p>
+
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var rzpButton = document.getElementById("rzp-button");
+        
+                rzpButton.addEventListener("click", function (e) {
+                    var razorpayKey = "{{ razorpay_key_id }}";
+                    var orderID = "{{ razorpay_order_id|default:'' }}";
+                    var amount = "{{ amount_in_paise }}";
+                    
+                    if (!razorpayKey || razorpayKey === "None") {
+                        console.error("Razorpay Key is missing");
+                        alert("Payment configuration error. Please contact support.");
+                        return;
+                    }
+        
+                    if (!orderID || orderID === "None") {
+                        console.error("Order ID is missing");
+                        alert("Payment setup error. Please try again.");
+                        return;
+                    }
+        
+                    if (!amount || amount === "None") {
+                        console.error("Amount is missing");
+                        alert("Payment setup error. Please try again.");
+                        return;
+                    }
+        
+                    var options = {
+                        "key": razorpayKey,
+                        "amount": parseInt(amount),
+                        "currency": "INR",
+                        "name": "Truly Wed Pvt Ltd",
+                        "description": "Order Payment",
+                        "order_id": orderID,
+                        "handler": function (response) {
+                            var form = document.createElement("form");
+                            form.method = "POST";
+                            form.action = "{{ callback_url }}";
+        
+                            var csrfInput = document.createElement("input");
+                            csrfInput.type = "hidden";
+                            csrfInput.name = "csrfmiddlewaretoken";
+                            csrfInput.value = "{{ csrf_token }}";
+                            form.appendChild(csrfInput);
+        
+                            var paymentIdInput = document.createElement("input");
+                            paymentIdInput.type = "hidden";
+                            paymentIdInput.name = "razorpay_payment_id";
+                            paymentIdInput.value = response.razorpay_payment_id;
+                            form.appendChild(paymentIdInput);
+        
+                            var orderIdInput = document.createElement("input");
+                            orderIdInput.type = "hidden";
+                            orderIdInput.name = "razorpay_order_id";
+                            orderIdInput.value = response.razorpay_order_id;
+                            form.appendChild(orderIdInput);
+        
+                            var signatureInput = document.createElement("input");
+                            signatureInput.type = "hidden";
+                            signatureInput.name = "razorpay_signature";
+                            signatureInput.value = response.razorpay_signature;
+                            form.appendChild(signatureInput);
+        
+                            document.body.appendChild(form);
+                            form.submit();
+                        },
+                        "prefill": {
+                            "name": "{{ user.first_name }} {{ user.last_name }}",
+                            "email": "{{ user.email }}",
+                            "contact": "{{ pending_order.phone|default:'' }}"
+                        },
+                        "theme": {
+                            "color": "#F37254"
+                        }
+                    };
+        
+                    var rzp = new Razorpay(options);
+                    rzp.open();
+                });
+            });
+        </script>
+        {% endblock%}

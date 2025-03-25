@@ -1,0 +1,218 @@
+{# admin_dashboard/dashboard.html #}
+{% extends "admin_dashboard/base.html" %}
+
+{% block title %}Dashboard | Admin Panel{% endblock %}
+
+{% block content %}
+<div class="dashboard container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold">Dashboard</h1>
+        <div class="date text-muted">{{ now|date:"l, F d, Y" }}</div>
+    </div>
+    
+    <!-- Small Square Stats Cards in a row -->
+    <div class="stats-row d-flex flex-wrap justify-content-center gap-4 mb-5">
+        <div class="stat-square shadow-sm">
+            <h3 class="stat-title">Products</h3>
+            <div class="stat-value">{{ total_products }}</div>
+            <a href="{% url 'admin_dashboard:product_list' %}" class="stat-link">View All</a>
+        </div>
+        
+        <div class="stat-square shadow-sm">
+            <h3 class="stat-title">Artists</h3>
+            <div class="stat-value">{{ total_artists }}</div>
+            <a href="{% url 'admin_dashboard:artist_list' %}" class="stat-link">View All</a>
+        </div>
+        
+        <div class="stat-square shadow-sm">
+            <h3 class="stat-title">Users</h3>
+            <div class="stat-value">{{ total_users }}</div>
+            <small class="stat-detail text-success">+{{ new_users_week }} new</small>
+            <a href="{% url 'admin_dashboard:user_list' %}" class="stat-link">View All</a>
+        </div>
+        
+        <div class="stat-square shadow-sm">
+            <h3 class="stat-title">Orders</h3>
+            <div class="stat-value">{{ total_orders }}</div>
+            <small class="stat-detail text-success">{{ orders_today }} today</small>
+            <a href="{% url 'admin_dashboard:order_list' %}" class="stat-link">View All</a>
+        </div>
+        
+        <div class="stat-square shadow-sm">
+            <h3 class="stat-title">Bookings</h3>
+            <div class="stat-value">{{ total_bookings }}</div>
+            <small class="stat-detail text-warning">{{ pending_bookings }} pending</small>
+            <a href="{% url 'admin_dashboard:booking_list' %}" class="stat-link">View All</a>
+        </div>
+    </div>
+    <br>
+    <div class="recent-data row g-4">
+        <div class="col-lg-6">
+            <div class="recent-section card shadow-sm h-100">
+                <div class="card-header bg-white py-3">
+                    <h2 class="card-title fs-4 mb-0">Recent Orders</h2>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-3">Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th class="text-end pe-3">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for order in recent_orders %}
+                                <tr>
+                                    <td class="ps-3"><a href="{% url 'admin_dashboard:order_detail' order.id %}" class="fw-medium text-decoration-none">{{ order.id }}</a></td>
+                                    <td>{{ order.user.get_full_name|default:order.user.username }}</td>
+                                    <td>{{ order.created|date:"M d, Y" }}</td>
+                                    <td>
+                                        {% if order.status == 'pending' %}
+                                            <span class="badge bg-warning text-dark">{{ order.get_status_display }}</span>
+                                        {% elif order.status == 'completed' %}
+                                            <span class="badge bg-success">{{ order.get_status_display }}</span>
+                                        {% elif order.status == 'cancelled' %}
+                                            <span class="badge bg-danger">{{ order.get_status_display }}</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ order.get_status_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-end pe-3">${{ order.get_total_cost|floatformat:2 }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr><td colspan="5" class="text-center py-3 text-muted">No recent orders</td></tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer bg-white text-end border-top-0">
+                    <a href="{% url 'admin_dashboard:order_list' %}" class="btn btn-sm btn-outline-secondary">View All Orders</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="recent-section card shadow-sm h-100">
+                <div class="card-header bg-white py-3">
+                    <h2 class="card-title fs-4 mb-0">Recent Bookings</h2>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-3">Booking ID</th>
+                                    <th>Customer</th>
+                                    <th>Artist</th>
+                                    <th>Date</th>
+                                    <th class="pe-3">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for booking in recent_bookings %}
+                                <tr>
+                                    <td class="ps-3"><a href="{% url 'admin_dashboard:booking_detail' booking.id %}" class="fw-medium text-decoration-none">{{ booking.id }}</a></td>
+                                    <td>{{ booking.user.get_full_name|default:booking.user.username }}</td>
+                                    <td>{{ booking.artist.name }}</td>
+                                    <td>{{ booking.date|date:"M d, Y" }}</td>
+                                    <td class="pe-3">
+                                        {% if booking.status == 'pending' %}
+                                            <span class="badge bg-warning text-dark">{{ booking.get_status_display }}</span>
+                                        {% elif booking.status == 'confirmed' %}
+                                            <span class="badge bg-success">{{ booking.get_status_display }}</span>
+                                        {% elif booking.status == 'cancelled' %}
+                                            <span class="badge bg-danger">{{ booking.get_status_display }}</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ booking.get_status_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr><td colspan="5" class="text-center py-3 text-muted">No recent bookings</td></tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer bg-white text-end border-top-0">
+                    <a href="{% url 'admin_dashboard:booking_list' %}" class="btn btn-sm btn-outline-secondary">View All Bookings</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Small Square Stats Styling */
+    .stats-row {
+        margin: 0 -10px;
+    }
+    
+    .stat-square {
+        width: 140px;
+        height: 140px;
+        background-color: white;
+        border-radius: 8px;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    
+    .stat-square:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    .stat-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: #6c757d;
+        margin-bottom: 5px;
+    }
+    
+    .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+    
+    .stat-detail {
+        font-size: 12px;
+        display: block;
+        margin-bottom: 8px;
+    }
+    
+    .stat-link {
+        font-size: 12px;
+        text-decoration: none;
+        position: absolute;
+        bottom: 10px;
+    }
+    
+    .table th {
+        font-weight: 600;
+        white-space: nowrap;
+    }
+    
+    .table td {
+        vertical-align: middle;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .stats-row {
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}

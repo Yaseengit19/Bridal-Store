@@ -1,0 +1,54 @@
+<!-- artists/templates/artists/booking_list.html -->
+{% extends 'shop/base.html' %}
+
+{% block title %}My Bookings{% endblock %}
+
+{% block content %}
+<h2>My Appointments</h2>
+<hr>
+
+{% if bookings %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Artist</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                    <tr>
+                        <td><a href="{{ booking.artist.get_absolute_url }}">{{ booking.artist.name }}</a></td>
+                        <td>{{ booking.date }}</td>
+                        <td>{{ booking.time_start }} - {{ booking.time_end }}</td>
+                        <td>
+                            {% if booking.status == 'pending' %}
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            {% elif booking.status == 'confirmed' %}
+                                <span class="badge bg-success">Confirmed</span>
+                            {% elif booking.status == 'completed' %}
+                                <span class="badge bg-info">Completed</span>
+                            {% elif booking.status == 'cancelled' %}
+                                <span class="badge bg-danger">Cancelled</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if booking.status == 'pending' or booking.status == 'confirmed' %}
+                                <a href="{% url 'artists:booking_cancel' booking.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to cancel this booking?')">Cancel</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        You don't have any bookings yet. <a href="{% url 'artists:artist_list' %}">Book an appointment</a>.
+    </div>
+{% endif %}
+{% endblock %}

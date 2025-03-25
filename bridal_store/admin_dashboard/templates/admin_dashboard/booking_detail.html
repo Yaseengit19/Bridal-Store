@@ -1,0 +1,60 @@
+{% extends "admin_dashboard/base.html" %}
+
+{% block title %}Update Booking Status | Admin Panel{% endblock %}
+
+{% block content %}
+<div class="booking-status-form">
+    <div class="page-header">
+        <h1>Update Booking Status</h1>
+    </div>
+    
+    <div class="booking-details">
+        <h3>Booking Information</h3>
+        <div class="detail-meta">
+            <div class="meta-item">
+                <span class="meta-label">Customer:</span>
+                <span class="meta-value">{{ booking.user.get_full_name|default:booking.user.username }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Artist:</span>
+                <span class="meta-value">{{ booking.artist.name }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Date:</span>
+                <span class="meta-value">{{ booking.date|date:"M d, Y" }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Time:</span>
+                <span class="meta-value">{{ booking.time_start|time:"H:i" }} - {{ booking.time_end|time:"H:i" }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Current Status:</span>
+                <span class="status-badge status-{{ booking.status }}">
+                    {{ booking.get_status_display }}
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    <form method="post" action="{% url 'admin_dashboard:booking_update_status' booking.id %}">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="status">New Status <span class="required">*</span></label>
+            <select id="status" name="status" required>
+                <option value="pending" {% if booking.status == "pending" %}selected{% endif %}>Pending</option>
+                <option value="confirmed" {% if booking.status == "confirmed" %}selected{% endif %}>Confirmed</option>
+                <option value="completed" {% if booking.status == "completed" %}selected{% endif %}>Completed</option>
+                <option value="cancelled" {% if booking.status == "cancelled" %}selected{% endif %}>Cancelled</option>
+            </select>
+        </div>
+        
+      
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Update Status</button>
+            <a href="{% url 'admin_dashboard:booking_detail' booking.id %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+<!-- accounts/templates/accounts/edit_profile.html -->
+{% extends 'shop/base.html' %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block content %}
+<h2>Edit Profile</h2>
+<hr>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Personal Information</h4>
+                </div>
+                <div class="card-body">
+                    {% for field in user_form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field.errors }}
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4>Contact Information</h4>
+                </div>
+                <div class="card-body">
+                    {% for field in profile_form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field.errors }}
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="d-flex justify-content-between">
+        <a href="{% url 'accounts:profile' %}" class="btn btn-outline-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </div>
+</form>
+{% endblock %}

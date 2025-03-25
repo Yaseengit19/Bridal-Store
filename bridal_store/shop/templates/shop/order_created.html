@@ -1,0 +1,23 @@
+{% extends 'shop/base.html' %}
+
+{% block title %}Order Confirmation{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Order Confirmation</h3>
+                </div>
+                <div class="card-body">
+                    <h5>Order ID: {{ order.id }}</h5>
+                    <p>Status: {{ order.status }}</p>
+                    <p>Total: Rs {{ order.get_total_cost }}</p>
+                    <p>Shipping Address: {{ user.profile.address }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

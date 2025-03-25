@@ -1,0 +1,54 @@
+{% extends "admin_dashboard/base.html" %}
+
+{% block title %}Bookings | Admin Panel{% endblock %}
+
+{% block content %}
+<div class="bookings-list">
+    <div class="page-header">
+        <h1>Bookings</h1>
+    </div>
+    
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Artist</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Duration (Hours)</th>
+                <th>Total Cost</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.id }}</td>
+                <td>{{ booking.user.username }}</td>
+                <td>{{ booking.artist.name }}</td>
+                <td>{{ booking.date }}</td>
+                <td>{{ booking.time_start }}</td>
+                <td>{{ booking.time_end }}</td>
+                <td>{{ booking.get_duration }}</td>
+                <td>Rs{{ booking.get_total_cost }}</td>
+                <td>
+                    <span class="status-badge status-{{ booking.status }}">
+                        {{ booking.get_status_display }}
+                    </span>
+                </td>
+                <td class="actions">
+                    <a href="{% url 'admin_dashboard:booking_detail' booking.id %}" class="btn btn-sm">Update</a>
+                    {% comment %} <a href="{% url 'admin_dashboard:booking_edit' booking.id %}" class="btn btn-sm btn-edit">Edit</a> {% endcomment %}
+                    {% comment %} <a href="{% url 'admin_dashboard:booking_delete' booking.id %}" class="btn btn-sm btn-delete">Delete</a> {% endcomment %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="10">No bookings available</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

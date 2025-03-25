@@ -1,0 +1,112 @@
+{% extends "admin_dashboard/base.html" %}
+
+{% block title %}Order #{{ order.id }} | Admin Panel{% endblock %}
+
+{% block content %}
+<div class="order-detail">
+    <div class="page-header">
+        <h1>Order Details</h1>
+        <div class="action-buttons">
+            {% comment %} <a href="{% url 'admin_dashboard:orders_list' %}" class="btn btn-secondary">Back to Orders</a> {% endcomment %}
+        </div>
+    </div>
+    
+    <div class="detail-content">
+        <div class="detail-info">
+            <h2>Order #{{ order.id }}</h2>
+            
+            <div class="detail-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Customer:</span>
+                    <span class="meta-value">{{ order.user.get_full_name|default:order.user.username }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Date:</span>
+                    <span class="meta-value">{{ order.created|date:"M d, Y" }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Total:</span>
+                    <span class="meta-value">Rs{{ order.get_total_cost|floatformat:2 }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Status:</span>
+                    <span class="status-badge status-{{ order.status }}">
+                        {{ order.get_status_display }}
+                    </span>
+                </div>
+            </div>
+            
+            <div class="status-update">
+                <h3>Update Status</h3>
+                <form method="POST" action="{% url 'admin_dashboard:order_update_status' order.id %}">
+                    {% csrf_token %}
+                    <select name="status">
+                        <option value="pending" {% if order.status == "pending" %}selected{% endif %}>Pending</option>
+                        <option value="confirmed" {% if order.status == "confirmed" %}selected{% endif %}>Confirmed</option>
+                        <option value="shipped" {% if order.status == "shipped" %}selected{% endif %}>Shipped</option>
+                        <option value="delivered" {% if order.status == "delivered" %}selected{% endif %}>Delivered</option>
+                        <option value="cancelled" {% if order.status == "cancelled" %}selected{% endif %}>Cancelled</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Update Status</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="order-items">
+        <h3>Order Items</h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in order.items.all %}
+                <tr>
+                    <td>
+                        <a href="{% url 'admin_dashboard:product_detail' item.product.id %}">
+                            {{ item.product.name }}
+                        </a>
+                    </td>
+                    <td>Rs{{ item.price|floatformat:2 }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>Rs{{ item.get_cost|floatformat:2 }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="4">No items in this order</td></tr>
+            {% endfor %}
+                <tr class="total-row">
+                    <td colspan="3"><strong>Total</strong></td>
+                    <td><strong>Rs{{ order.get_total_cost|floatformat:2 }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    {% if order.shipping_address %}
+    <div class="shipping-details">
+        <h3>Shipping Information</h3>
+        <div class="address-info">
+            <p><strong>Address:</strong> {{ order.shipping_address }}</p>
+            {% if order.shipping_city %}<p><strong>City:</strong> {{ order.shipping_city }}</p>{% endif %}
+            {% if order.shipping_state %}<p><strong>State:</strong> {{ order.shipping_state }}</p>{% endif %}
+            {% if order.shipping_postal_code %}<p><strong>Postal Code:</strong> {{ order.shipping_postal_code }}</p>{% endif %}
+            {% if order.shipping_country %}<p><strong>Country:</strong> {{ order.shipping_country }}</p>{% endif %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if order.notes %}
+    <div class="order-notes">
+        <h3>Notes</h3>
+        <div class="notes-content">
+            {{ order.notes|linebreaks }}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

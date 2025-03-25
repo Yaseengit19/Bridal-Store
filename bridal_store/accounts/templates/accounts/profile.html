@@ -1,0 +1,103 @@
+<!-- accounts/templates/accounts/profile.html -->
+{% extends 'shop/base.html' %}
+{% load shop_extras %}
+
+{% block title %}My Account{% endblock %}
+
+{% block content %}
+<h2>My Profile</h2>
+<div class="mb-4">
+    <a href="{% url 'accounts:edit_profile' %}" class="btn btn-outline-primary">Edit Profile</a>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Personal Information</h4>
+            </div>
+            <div class="card-body">
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Phone:</strong> {{ user.profile.phone|default:"Not provided" }}</p>
+                <p><strong>Shipping Address:</strong> {{ user.profile.address|default:"Not provided" }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>My Bookings</h4>
+            </div>
+            <div class="card-body">
+                {% if bookings %}
+                    <div class="list-group">
+                        {% for booking in bookings %}
+                            <a href="{% url 'artists:artist_detail' booking.artist.slug %}" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">{{ booking.artist.name }}</h5>
+                                    <small>{{ booking.date }}</small>
+                                </div>
+                                <p class="mb-1">{{ booking.time_start }} - {{ booking.time_end }}</p>
+                                <small class="text-muted">Status: {{ booking.status }}</small>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>You don't have any bookings yet.</p>
+                    <a href="{% url 'artists:artist_list' %}" class="btn btn-sm btn-outline-primary">Book an Artist</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h4>Order History</h4>
+    </div>
+    <div class="card-body">
+        {% if orders %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Order #</th>
+                            <th>Product</th>
+                            <th>Date</th>
+                            <th>Expected Delivery</th>
+                            <th>Total</th>
+                            <th>Payment Status</th>
+                            <th>Delivery Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                            <tr>
+                                <td>{{ order.id }}</td>
+                                <td>
+                                    {% for item in order.items.all %}
+                                        {{ item.product.name }}{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>{{ order.created|date:"M d, Y" }}</td>
+                                <td>{{ order.created|date:"M d, Y"|add_days:7 }}</td>
+                                <td>Rs: {{ order.get_total_cost }}</td>
+                                <td>Paid</td>
+                                <td>
+                                       {{order.status}} 
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p>You haven't placed any orders yet.</p>
+            <a href="{% url 'shop:product_list' %}" class="btn btn-sm btn-outline-primary">Shop Now</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

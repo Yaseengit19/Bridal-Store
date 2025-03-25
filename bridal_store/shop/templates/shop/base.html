@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Truly Wed{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #f8e1e4;
+            --secondary-color: #faf0e6;
+            --accent-color: #d4af7a;
+            --text-color: #3a3a3a;
+            --light-text: #6c757d;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-color);
+        }
+        
+        h1, h2, h3, h4, h5, h6, .navbar-brand {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 28px;
+            color: var(--accent-color);
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            color: var(--text-color);
+            margin: 0 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--accent-color);
+        }
+        
+        .hero {
+            background-image: url('C:\Users\Yaseen\Desktop\New folder\bridal_store\media\bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 70vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+            max-width: 800px;
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+        }
+        
+        .hero-content h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+        
+        .hero-content p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: var(--text-color);
+        }
+        
+        .btn-primary {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            padding: 10px 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #c19b69;
+            border-color: #c19b69;
+            transform: translateY(-2px);
+        }
+        
+        .featured-section {
+            padding: 60px 0;
+            background-color: var(--secondary-color);
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+        
+        .card {
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-title {
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .price {
+            color: var(--accent-color);
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .testimonial {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .testimonial img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+        
+        .footer {
+            background-color: var(--secondary-color);
+            padding: 60px 0 20px;
+            margin-top: 50px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .footer h5 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+        
+        .footer p, .footer a {
+            color: var(--light-text);
+        }
+        
+        .footer a:hover {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        .social-links {
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 36px;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            transform: translateY(-3px);
+            background-color: #c19b69;
+        }
+        
+        .newsletter-form {
+            margin-top: 20px;
+        }
+        
+        .newsletter-form .form-control {
+            border-radius: 25px 0 0 25px;
+            border: none;
+            padding: 12px 20px;
+        }
+        
+        .newsletter-form .btn {
+            border-radius: 0 25px 25px 0;
+            padding: 12px 20px;
+        }
+        
+        .alert {
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+          }
+          
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'shop:product_list' %}">Truly Wed</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'shop:landing' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'shop:product_list' %}">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'artists:artist_list' %}">Makeup Artists</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'shop:aboutus' %}">About Us</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'shop:cart_detail' %}">
+                            <i class="fas fa-shopping-bag"></i> Cart
+                        </a>
+                    </li>
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'accounts:profile' %}">
+                                <i class="fas fa-user"></i> My Account
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'accounts:logout' %}">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'accounts:login' %}">
+                                <i class="fas fa-sign-in-alt"></i> User Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="http://127.0.0.1:8000/accounts/login/?next=/admin_dashboard/">
+                                <i class="fas fa-user"></i> Admin Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'accounts:register' %}">
+                                <i class="fas fa-user-plus"></i> Register
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container" style="margin-top:100px;">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}
+        <!-- Content will be inserted here from child templates -->
+        {% endblock %}
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>About Truly Wed</h5>
+                    <p>We offer premium bridal products and makeup artist services to make your special day perfect.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-5">
+                    <h5>Newsletter</h5>
+                    <p>Subscribe for wedding tips, exclusive offers and more!</p>
+                    <form class="newsletter-form">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Your email">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p>&copy; {% now "Y" %} Truly Wed. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Wait for the DOM to be fully loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        // Apply to all links you want to delay
+        document.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', function(e) {
+            // Skip if it's a special link that should behave normally
+            if (this.classList.contains('no-delay') || this.getAttribute('target') === '_blank') {
+              return;
+            }
+            
+            e.preventDefault(); // Prevent immediate navigation
+            const targetUrl = this.getAttribute('href');
+            
+            // Create TW spinner and loading overlay
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.className = 'loading-overlay';
+            loadingOverlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:white;transform:translateX(-100%);z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;';
+            
+            // Create TW spinner
+            const twSpinner = document.createElement('div');
+            twSpinner.className = 'tw-spinner';
+            twSpinner.innerHTML = 'TW';
+            twSpinner.style.cssText = 'font-weight:bold;font-size:32px;color:#0d6efd;animation:spin-horizontal 1s infinite linear;';
+            
+            // Add company name below spinner
+            const companyText = document.createElement('p');
+            companyText.textContent = 'Truly Wed Ltd';
+            companyText.style.marginTop = '10px';
+            
+            // Append elements
+            loadingOverlay.appendChild(twSpinner);
+            loadingOverlay.appendChild(companyText);
+            document.body.appendChild(loadingOverlay);
+            
+            // Add animation styles
+            const styleElement = document.createElement('style');
+            styleElement.textContent = `
+              @keyframes spin-horizontal {
+                0% { transform: rotateY(0deg); }
+                100% { transform: rotateY(360deg); }
+              }
+              
+              .loading-overlay {
+                animation: slide-in 1.5s forwards, slide-out 1.5s forwards 1.5s;
+              }
+              
+              @keyframes slide-in {
+                0% { transform: translateX(-100%); }
+                100% { transform: translateX(0); }
+              }
+              
+              @keyframes slide-out {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(100%); }
+              }
+            `;
+            document.head.appendChild(styleElement);
+            
+            // Navigate after delay
+            setTimeout(function() {
+              window.location.href = targetUrl;
+            }, 1000);
+          });
+        });
+      });
+    </script>
+</body>
+</html>

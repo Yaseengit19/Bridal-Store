@@ -1,0 +1,36 @@
+<!-- artists/templates/artists/artist_list.html -->
+{% extends 'shop/base.html' %}
+
+{% block title %}Makeup Artists{% endblock %}
+
+{% block content %}
+<h2>Our Makeup Artists</h2>
+<p class="lead">Book a session with our professional makeup artists for your special day</p>
+<hr>
+
+<div class="row">
+    {% for artist in artists %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                {% if artist.photo %}
+                    <img src="{{ artist.photo.url }}" class="card-img-top" alt="{{ artist.name }}">
+                {% else %}
+                    <div class="bg-light p-5 text-center">No Photo</div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ artist.name }}</h5>
+                    <p class="card-text"><strong>Specialization:</strong> {{ artist.specialization }}</p>
+                    <p class="card-text"><strong>Rate:</strong> Rs: {{ artist.price_per_hour }}/hour</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ artist.get_absolute_url }}" class="btn btn-outline-primary">View Profile</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <p>No makeup artists available at the moment.</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

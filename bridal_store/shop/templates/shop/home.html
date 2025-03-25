@@ -1,0 +1,38 @@
+<!-- shop/templates/shop/home.html -->
+{% extends 'shop/base.html' %}
+
+{% block title %}Bridal Bliss - Your Wedding Essentials{% endblock %}
+
+{% block content %}
+<div class="hero text-center">
+    <h1>Welcome to Truly Wed !</h1>
+    <p class="lead">Your one-stop shop for wedding essentials and professional makeup services</p>
+    <div class="mt-4">
+        <a href="{% url 'shop:product_list' %}" class="btn btn-primary me-2">Shop Now</a>
+        <a href="{% url 'artists:artist_list' %}" class="btn btn-outline-primary">Book Makeup Artist</a>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="card-title">Premium Bridal Products</h3>
+                <p class="card-text">Discover our curated collection of wedding essentials, from accessories to gifts.</p>
+                <a href="{% url 'shop:product_list' %}" class="btn btn-sm btn-outline-secondary">Browse Products</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="card-title">Professional Makeup Artists</h3>
+                <p class="card-text">Book our talented makeup artists for your special day and look your absolute best.</p>
+                <a href="{% url 'artists:artist_list' %}" class="btn btn-sm btn-outline-secondary">Meet Our Artists</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

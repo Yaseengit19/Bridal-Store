@@ -1,0 +1,89 @@
+{# admin_dashboard/templates/admin_dashboard/base.html #}
+<!DOCTYPE html>
+{% load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Truly Wed Admin{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'admin_dashboard/css/styles.css' %}">
+</head>
+<body>
+    <div class="admin-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1> Truly Wed Admin</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="{% url 'admin_dashboard:admin_dashboard' %}" 
+                           class="{% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'admin_dashboard:product_list' %}" 
+                           class="{% if 'product' in request.resolver_match.url_name %}active{% endif %}">
+                            Products
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'admin_dashboard:category_list' %}" 
+                           class="{% if 'category' in request.resolver_match.url_name %}active{% endif %}">
+                            Categories
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'admin_dashboard:order_list' %}" 
+                           class="{% if 'order' in request.resolver_match.url_name %}active{% endif %}">
+                            Orders
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'admin_dashboard:artist_list' %}" 
+                           class="{% if 'artist' in request.resolver_match.url_name %}active{% endif %}">
+                            Artists
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'admin_dashboard:booking_list' %}" 
+                           class="{% if 'booking' in request.resolver_match.url_name %}active{% endif %}">
+                            Bookings
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'admin_dashboard:user_list' %}" 
+                           class="{% if 'user' in request.resolver_match.url_name %}active{% endif %}">
+                            Users
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <main class="main-content">
+            <header class="main-header">
+                <div class="user-info">
+                    <span>Welcome, {{ request.user.get_full_name|default:request.user.username }}</span>
+                    <a href="{% url 'admin_dashboard:logout' %}" class="btn btn-sm">Logout</a>
+                </div>
+            </header>
+            
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

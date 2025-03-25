@@ -1,0 +1,80 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Truly Wed</title>
+
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="header-overlay"></div>
+        <div class="header-content">
+            <h1>About Us</h1>
+            <p>Learn more about Truly Wed and our passion for bridal excellence</p>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-4 mb-md-0">
+                    <div class="about-image">
+                        <img src="{% static 'images/logo.png' %}" alt="Truly Wed Store">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h2 class="section-title">Our Story</h2>
+                    <p>Founded in 2025, Truly Wed began with a simple vision: to create a bridal boutique that offered not just beautiful products, but an exceptional experience for every bride on her journey to the perfect wedding day.</p>
+                    <p>What started as a small family business has blossomed into a premier destination for brides seeking quality, elegance, and personalized service. Our curated collection features designs from both established and emerging talents in the bridal industry.</p>
+                    <p>At Truly Wed, we believe that finding your wedding dress, accessories, and makeup artists should be a joyful part of your wedding journey. Our team of experienced consultants is dedicated to helping you discover pieces that reflect your unique style and make you feel truly special on your big day.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Our Values -->
+    <section class="values-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="mb-3">Our Values</h2>
+                <p class="lead">The principles that guide everything we do at Truly Wed</p>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3 class="value-title">Personalized Service</h3>
+                        <p>We believe every bride deserves individualized attention. Our consultants take the time to understand your vision and help bring it to life.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <h3 class="value-title">Quality & Craftsmanship</h3>
+                        <p>We curate products made with the finest materials and attention to detail, ensuring pieces that are not only beautiful but made to last.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h3 class="value-title">Sustainability</h3>
+                        <p>We're committed to environmentally responsible practices throughout our business, from sourcing to packaging.</p>
+                    </div>
+                </div>
+            </body>
+        </html>
+{% endblock %}

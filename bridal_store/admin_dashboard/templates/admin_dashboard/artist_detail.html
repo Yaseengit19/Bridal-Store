@@ -1,0 +1,110 @@
+{% extends "admin_dashboard/base.html" %}
+
+{% block title %}{{ artist.name }} | Admin Panel{% endblock %}
+
+{% block content %}
+<div class="artist-detail">
+    <div class="page-header">
+        <h1>Artist Details</h1>
+        <div class="action-buttons">
+
+        </div>
+    </div>
+    
+    <div class="detail-content">
+        <div class="detail-image">
+            {% if artist.photo %}
+                <img src="{{ artist.photo.url }}" alt="{{ artist.name }}"  style="width: 300px; height: 300px; object-fit: cover; border-radius: 5px;">
+            {% else %}
+                <div class="no-image">No Photo Available</div>
+            {% endif %}
+        </div>
+        
+        <div class="detail-info">
+            <h2>{{ artist.name }}</h2>
+            <p class="detail-slug">Slug: {{ artist.slug }}</p>
+            
+            <div class="detail-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Specialization:</span>
+                    <span class="meta-value">{{ artist.specialization }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Price Per Hour:</span>
+                    <span class="meta-value">Rs{{ artist.price_per_hour|floatformat:2 }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Available:</span>
+                    <span class="meta-value {% if artist.available %}available{% else %}unavailable{% endif %}">
+                        {% if artist.available %}Yes{% else %}No{% endif %}
+                    </span>
+                </div>
+            </div>
+            
+            <div class="detail-description">
+                <h3>Biography</h3>
+                <div class="description-content">{{ artist.bio|linebreaks }}</div>
+            </div>
+        </div>
+    </div>
+    
+    {% if artist.projects.all %}
+    <div class="artist-projects">
+        <h3>Recent Projects</h3>
+        <div class="projects-list">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Project</th>
+                        <th>Client</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for project in artist.projects.all %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'admin_dashboard:project_detail' project.id %}">
+                                {{ project.title }}
+                            </a>
+                        </td>
+                        <td>{{ project.client }}</td>
+                        <td>{{ project.date|date:"M d, Y" }}</td>
+                        <td>
+                            <span class="status-badge status-{{ project.status }}">
+                                {{ project.get_status_display }}
+                            </span>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if artist.testimonials.all %}
+    <div class="artist-testimonials">
+        <h3>Testimonials</h3>
+        <div class="testimonials-list">
+            {% for testimonial in artist.testimonials.all %}
+                <div class="testimonial-item">
+                    <p class="testimonial-text">"{{ testimonial.text }}"</p>
+                    <p class="testimonial-author">— {{ testimonial.author }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if artist.availability_schedule %}
+    <div class="artist-availability">
+        <h3>Availability Schedule</h3>
+        <div class="schedule-content">
+            {{ artist.availability_schedule|linebreaks }}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

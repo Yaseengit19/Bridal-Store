@@ -1,0 +1,58 @@
+{# admin_dashboard/products/list.html #}
+{% extends "admin_dashboard/base.html" %}
+
+{% block title %}Products | Admin Panel{% endblock %}
+
+{% block content %}
+<div class="products-list">
+    <div class="page-header">
+        <h1>Products</h1>
+        <a href="{% url 'admin_dashboard:product_create' %}" class="btn btn-primary">Add New Product</a>
+    </div>
+    
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Available</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="thumbnail" style=" height:300px; width:300px;">
+                    {% else %}
+                        <div class="no-image">No Image</div>
+                    {% endif %}
+                </td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.category.name }}</td>
+                <td>${{ product.price|floatformat:2 }}</td>
+                <td>{{ product.stock }}</td>
+                <td>
+                    <span class="status-badge status-{% if product.available %}available{% else %}unavailable{% endif %}">
+                        {% if product.available %}Yes{% else %}No{% endif %}
+                    </span>
+                </td>
+                <td class="actions">
+                    <a href="{% url 'admin_dashboard:product_detail' product.id %}" class="btn btn-sm">View</a>
+                    <a href="{% url 'admin_dashboard:product_edit' product.id %}" class="btn btn-sm btn-edit">Edit</a>
+                    <a href="{% url 'admin_dashboard:product_delete' product.id %}" class="btn btn-sm btn-delete">Delete</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="8">No products available</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

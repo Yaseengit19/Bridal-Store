@@ -1,0 +1,80 @@
+{# admin_dashboard/categories/list.html #}
+{% extends "admin_dashboard/base.html" %}
+
+{% block title %}Categories | Admin Panel{% endblock %}
+
+{% block content %}
+<div class="categories-list">
+    <div class="page-header">
+        <h1>Categories</h1>
+        <a href="{% url 'admin_dashboard:category_create' %}" class="btn btn-primary">Add New Category</a>
+    </div>
+    
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Slug</th>
+                <th>Products</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for category in categories %}
+            <tr>
+                <td>{{ category.id }}</td>
+                <td>{{ category.name }}</td>
+                <td>{{ category.slug }}</td>
+                <td>{{ category.product_set.count }}</td>
+                <td class="actions">
+                    <a href="{% url 'admin_dashboard:category_edit' category.id %}" class="btn btn-sm btn-edit">Edit</a>
+                    <a href="{% url 'admin_dashboard:category_delete' category.id %}" class="btn btn-sm btn-delete">Delete</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="5">No categories available</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+<div class="orders-list">
+    <div class="page-header">
+        <h1>Orders</h1>
+    </div>
+    
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.user.get_full_name|default:order.user.username }}</td>
+                <td>{{ order.created|date:"M d, Y" }}</td>
+                <td>
+                    <span class="status-badge status-{{ order.status }}">
+                        {{ order.get_status_display }}
+                    </span>
+                </td>
+                <td>Rs{{ order.get_total_cost|floatformat:2 }}</td>
+                <td class="actions">
+                    <a href="{% url 'admin_dashboard:order_detail' order.id %}" class="btn btn-sm">View</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="6">No orders available</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

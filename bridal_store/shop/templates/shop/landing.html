@@ -1,0 +1,572 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Truly Wed - Premium Bridal Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #f8e1e4;
+            --secondary-color: #faf0e6;
+            --accent-color: #d4af7a;
+            --text-color: #3a3a3a;
+            --light-text: #6c757d;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-color);
+        }
+        
+        h1, h2, h3, h4, h5, h6, .navbar-brand {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 28px;
+            color: var(--accent-color);
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            color: var(--text-color);
+            margin: 0 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--accent-color);
+        }
+        
+        .hero {
+            background-image: url('\media\bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 70vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 50px;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+            max-width: 800px;
+            padding: 40px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+        }
+        
+        .hero-content h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+        
+        .hero-content p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: var(--text-color);
+        }
+        
+        .btn-primary {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            padding: 10px 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #c19b69;
+            border-color: #c19b69;
+            transform: translateY(-2px);
+        }
+        
+        .featured-section {
+            padding: 60px 0;
+            background-color: var(--secondary-color);
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+        
+        .card {
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-img-top {
+            height: 400px;
+            object-fit: cover;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .card-title {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .price {
+            color: var(--accent-color);
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .categories {
+            padding: 60px 0;
+        }
+        
+        .category-item {
+            position: relative;
+            margin-bottom: 30px;
+            overflow: hidden;
+            border-radius: 8px;
+            height: 250px;
+        }
+        
+        .category-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+        
+        .category-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .category-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.7));
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+        }
+        
+        .category-title {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+        
+        .testimonials {
+            background-color: var(--primary-color);
+            padding: 60px 0;
+        }
+        
+        .testimonial {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            margin-bottom: 30px;
+            height: 100%;
+        }
+        
+        .testimonial img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        
+        .testimonial-name {
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+        
+        .newsletter {
+            padding: 60px 0;
+            background-color: var(--secondary-color);
+        }
+        
+        .newsletter-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .newsletter-form .form-control {
+            border-radius: 25px 0 0 25px;
+            border: none;
+            padding: 12px 20px;
+            height: 50px;
+        }
+        
+        .newsletter-form .btn {
+            border-radius: 0 25px 25px 0;
+            padding: 12px 25px;
+            height: 50px;
+        }
+        
+        .footer {
+            background-color: var(--secondary-color);
+            padding: 60px 0 20px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .footer h5 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+        
+        .footer p, .footer a {
+            color: var(--light-text);
+        }
+        
+        .footer a:hover {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+        
+        .social-links {
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 36px;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            transform: translateY(-3px);
+            background-color: #c19b69;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">Truly Wed</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'shop:product_list' %}">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'artists:artist_list' %}">Makeup Artists</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About Us</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'shop:cart_detail' %}">
+                            <i class="fas fa-shopping-bag"></i> Cart
+                        </a>
+                    </li>
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:profile' %}">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:logout' %}">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:login' %}">
+                            <i class="fas fa-user"></i> User Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://127.0.0.1:8000/accounts/login/?next=/admin_dashboard/">
+                            <i class="fas fa-user"></i> Admin Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:register' %}">
+                            <i class="fas fa-user-plus"></i> Register
+                        </a>
+                    </li>
+                    {% endif %}
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Your Perfect Day Starts Here</h1>
+            <p>Discover our collection of premium bridal products and expert makeup artists to make your wedding day truly special.</p>
+            <a href="{% url 'shop:product_list' %}" class="btn btn-primary">Shop Now</a>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Featured Products</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="{% static 'images/f1.jpg' %}" class="card-img-top" alt="Bridal Dress">
+                        <div class="card-body">
+                            <p class="card-text">A beautiful lace wedding dress with elegant detailing.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="{% static 'images/f2.jpg' %}" class="card-img-top" alt="Bridal Veil">
+                        <div class="card-body">
+                            <p class="card-text">A delicate veil with crystal embellishments.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="{% static 'images/f3.jpg' %}" class="card-img-top" alt="Bridal Jewelry">
+                        <div class="card-body">
+                            <p class="card-text">Elegant pearl drop earrings for your special day.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="{% static 'images/f4.jpg' %}" class="card-img-top" alt="Bridal Jewelry">
+                        <div class="card-body">
+                            <p class="card-text">Elegant pearl drop earrings for your special day.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="{% static 'images/f5.jpg' %}" class="card-img-top" alt="Bridal Jewelry">
+                        <div class="card-body">
+                            <p class="card-text">Elegant pearl drop earrings for your special day.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="{% static 'images/f7.jpg' %}" class="card-img-top" alt="Bridal Jewelry">
+                        <div class="card-body">
+                            <p class="card-text">Elegant pearl drop earrings for your special day.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="{% static 'images/f6.jpg' %}" class="card-img-top" alt="Bridal Jewelry">
+                        <div class="card-body">
+                            <p class="card-text">Elegant pearl drop earrings for your special day.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="{% static 'images/f8.jpg' %}" class="card-img-top" alt="Bridal Jewelry">
+                        <div class="card-body">
+                            <p class="card-text">Elegant pearl drop earrings for your special day.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="{% url 'shop:product_list' %}" class="btn btn-primary">View All Products</a>
+            </div>
+        </div>
+    </section>
+    <!-- Featured Products -->
+    <section class="featured-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Proffesional Artists</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="{% static 'images/mkup.jpg' %}" class="card-img-top" alt="Bridal Dress">
+                        <div class="card-body">
+                            <p class="card-text"> .</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="{% static 'images/mkup4.jpg' %}" class="card-img-top" alt="Bridal Veil">
+                        <div class="card-body">
+                            <p class="card-text">A delicate veil with crystal embellishments.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="{% static 'images/mkup2.jpg' %}" class="card-img-top" alt="Bridal Jewelry">
+                        <div class="card-body">
+                            <p class="card-text">Elegant pearl drop earrings for your special day.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="{% static 'images/mkup3.jpg' %}" class="card-img-top" alt="Bridal Jewelry">
+                        <div class="card-body">
+                            <p class="card-text">Elegant pearl drop earrings for your special day.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer class="footer">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4 mb-4">
+                                <h5>About Truly Wed</h5>
+                                <p>We offer premium bridal products and makeup artist services to make your special day perfect.</p>
+                                <div class="social-links">
+                                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="#"><i class="fab fa-instagram"></i></a>
+                                    <a href="#"><i class="fab fa-pinterest-p"></i></a>
+                                    <a href="#"><i class="fab fa-tiktok"></i></a>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-4">
+                                <h5>Quick Links</h5>
+                                <ul class="list-unstyled">
+                                    <li><a href="#">About Us</a></li>
+                                    <li><a href="#">FAQs</a></li>
+                                    <li><a href="#">Contact Us</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-md-3 mb-5">
+                                <h5>Newsletter</h5>
+                                <p>Subscribe for wedding tips, exclusive offers and more!</p>
+                                <form class="newsletter-form">
+                                    <div class="input-group">
+                                        <input type="email" class="form-control" placeholder="Your email">
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="text-center">
+                            <p>&copy; {% now "Y" %} Truly Wed. All rights reserved.</p>
+                        </div>
+                    </div>
+                </footer>

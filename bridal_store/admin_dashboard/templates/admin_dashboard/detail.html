@@ -1,0 +1,65 @@
+{# admin_dashboard/products/detail.html #}
+{% extends "admin_dashboard/base.html" %}
+
+{% block title %}{{ product.name }} | Admin Panel{% endblock %}
+
+{% block content %}
+<div class="product-detail">
+    <div class="page-header">
+        <h1>Product Details</h1>
+        <div class="action-buttons">
+            {% comment %} <a href="{% url 'admin_dashboard:product_edit' product.id %}" class="btn btn-edit">Edit Product</a> {% endcomment %}
+            {% comment %} <a href="{% url 'admin_dashboard:product_delete' product.id %}" class="btn btn-delete">Delete Product</a> {% endcomment %}
+        </div>
+    </div>
+    
+    <div class="detail-content">
+        <div class="detail-image">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% else %}
+                <div class="no-image">No Image Available</div>
+            {% endif %}
+        </div>
+        
+        <div class="detail-info">
+            <h2>{{ product.name }}</h2>
+            <p class="detail-slug">Slug: {{ product.slug }}</p>
+            
+            <div class="detail-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Category:</span>
+                    <span class="meta-value">{{ product.category.name }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Price:</span>
+                    <span class="meta-value">${{ product.price|floatformat:2 }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Stock:</span>
+                    <span class="meta-value">{{ product.stock }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Available:</span>
+                    <span class="meta-value {% if product.available %}available{% else %}unavailable{% endif %}">
+                        {% if product.available %}Yes{% else %}No{% endif %}
+                    </span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Created:</span>
+                    <span class="meta-value">{{ product.created|date:"M d, Y" }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Last Updated:</span>
+                    <span class="meta-value">{{ product.updated|date:"M d, Y" }}</span>
+                </div>
+            </div>
+            
+            <div class="detail-description">
+                <h3>Description</h3>
+                <div class="description-content">{{ product.description|linebreaks }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

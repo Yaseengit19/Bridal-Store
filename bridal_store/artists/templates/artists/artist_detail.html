@@ -1,0 +1,29 @@
+<!-- artists/templates/artists/artist_detail.html -->
+{% extends 'shop/base.html' %}
+
+{% block title %}{{ artist.name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        {% if artist.photo %}
+            <img src="{{ artist.photo.url }}" class="img-fluid rounded" alt="{{ artist.name }}">
+        {% else %}
+            <div class="bg-light p-5 text-center rounded">No Photo</div>
+        {% endif %}
+    </div>
+    <div class="col-md-8">
+        <h2>{{ artist.name }}</h2>
+        <p class="lead">{{ artist.specialization }}</p>
+        <hr>
+        <p>{{ artist.bio|linebreaks }}</p>
+        <p><strong>Rate:</strong> Rs: {{ artist.price_per_hour }}/hour</p>
+        
+        {% if artist.available %}
+            <a href="{% url 'artists:booking_create' artist.id %}" class="btn btn-success mt-3">Book Appointment</a>
+        {% else %}
+            <button class="btn btn-secondary mt-3" disabled>Currently Unavailable</button>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

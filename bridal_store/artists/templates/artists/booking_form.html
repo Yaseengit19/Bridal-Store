@@ -1,0 +1,31 @@
+<!-- artists/templates/artists/booking_form.html -->
+{% extends 'shop/base.html' %}
+
+{% block title %}Book Appointment with {{ artist.name }}{% endblock %}
+
+{% block content %}
+<h2>Book Appointment with {{ artist.name }}</h2>
+<p class="lead">{{ artist.specialization }} - Rs :{{ artist.price_per_hour }}/hour</p>
+<hr>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <div class="row">
+        {% for field in form %}
+            <div class="col-md-6 mb-3">
+                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                {{ field.errors }}
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+    
+    <div class="alert alert-info">
+        <p><strong>Note:</strong> Please select your preferred date and time. We will confirm your booking within 24 hours.</p>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Book Appointment</button>
+    <a href="{{ artist.get_absolute_url }}" class="btn btn-outline-secondary">Cancel</a>
+</form>
+{% endblock %}

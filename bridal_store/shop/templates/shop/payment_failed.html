@@ -1,0 +1,43 @@
+<!-- shop/templates/shop/payment_failed.html -->
+{% extends 'shop/base.html' %}
+
+{% block title %}Payment Failed{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h3>Payment Failed</h3>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-times-circle text-danger" style="font-size: 64px;"></i>
+                    </div>
+                    
+                    <h4>Your payment could not be processed</h4>
+                    
+                    {% if error %}
+                        <div class="alert alert-danger">
+                            {{ error }}
+                        </div>
+                    {% endif %}
+                    
+                    <p>Please try the following:</p>
+                    <ul>
+                        <li>Check your payment details and try again</li>
+                        <li>Use a different payment method</li>
+                        <li>Contact your bank if the issue persists</li>
+                    </ul>
+                    
+                    <div class="mt-4 text-center">
+                        <a href="{% url 'shop:checkout' %}" class="btn btn-primary">Return to Checkout</a>
+                        <a href="{% url 'shop:product_list' %}" class="btn btn-outline-secondary ml-2">Continue Shopping</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
